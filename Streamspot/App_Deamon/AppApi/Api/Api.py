@@ -43,10 +43,10 @@ def OTP_Varification(req):
                      if(len(rv)!= 0 and req.POST['otp']!= "" and rv[0]['otp']==int(req.POST['otp'])):
                            res=  JsonResponse({"response":True , "data":Select("select id from customer where id= {}".format(req.POST['id']))})
                      else:
-                           res=  JsonResponse({"response":False , "data":"Incorrect OTP"})
+                           res=  JsonResponse({"response":False , "data":[{"message":"Incorrect OTP"}]})
                      response = HttpResponse(res,None,200,"Successfully Requested")
                   except:
-                     res=  JsonResponse({"response":False , "data":"Something went wrong"})
+                     res=  JsonResponse({"response":False , "data":[{"message":"Something went wrong"}]})
                      response = HttpResponse("Bad Request",None,400,"Bad Request")
                else:
                      response = HttpResponse("Method Not Allowed!",None,405,"Method Not Allowed")
@@ -56,6 +56,32 @@ def OTP_Varification(req):
          response = HttpResponse("UnAuthorized Access!",None,401,"UnAuthorized Access")
 
        return response
+
+@csrf_exempt
+def Login(req):
+       try:
+         if(req.headers['sha'] != None and req.headers['sha'] != ""  and Authentication(req.headers['sha'],12)):
+               if(req.method == "POST"):
+                  try:
+                     rv= Select("SELECT * FROM `customer` where sha256 = '{}';".format(req.headers['sha']))
+                     print(rv)
+                     if(len(rv)!= 0 and req.POST['mobile']!= "" and req.POST['password']!= "" and rv[0]['mobile']==req.POST['mobile'] and rv[0]['pass']==req.POST['password'] ):
+                           res=  JsonResponse({"response":True , "data":Select("select id,name,email,mobile from customer where id= {}".format(rv[0]['id']))})
+                     else:
+                           res=  JsonResponse({"response":False ,  "data":[{"message":"Incorrect Credentials"}]})
+                     response = HttpResponse(res,None,200,"Successfully Requested")
+                  except:
+                     res=  JsonResponse({"response":False ,  "data":[{"message":"Something went wrong"}]})
+                     response = HttpResponse("Bad Request",None,400,"Bad Request")
+               else:
+                     response = HttpResponse("Method Not Allowed!",None,405,"Method Not Allowed")
+         else:
+               response = HttpResponse("UnAuthorized Access!",None,401,"UnAuthorized Access")
+       except:
+         response = HttpResponse("UnAuthorized Access!",None,401,"UnAuthorized Access")
+
+       return response
+
              
            
           

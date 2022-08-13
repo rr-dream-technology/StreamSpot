@@ -11,7 +11,8 @@ def Generate_OTP(C_ID , emailid):
 
 def Authentication(token, id):
     q= Select("select id from customer where sha256 ='{}'".format(token))
-    if(len(q)!= 0 and id != "" and  int(id) == q[0]['id']):
+    # if(len(q)!= 0 and id != "" and  int(id) == q[0]['id']):
+    if(len(q)!= 0 ):
         return True
     else:
         return False

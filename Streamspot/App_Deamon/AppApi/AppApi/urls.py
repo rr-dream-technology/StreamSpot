@@ -22,4 +22,5 @@ urlpatterns = [
   path('version', Api.VersionCheck , name='version'),
   path('signup', Api.Signup_Customer , name='signup'),
   path('varify', Api.OTP_Varification , name='varify'),
+   path('login', Api.Login , name='login'),
 ]
