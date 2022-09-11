@@ -3,7 +3,7 @@ import mysql.connector as mcdb
 
 
 
-conn = mcdb.connect(host="localhost", user="root", passwd="", database='StreamSpot')
+conn = mcdb.connect(host="mydatabase-1.cmosw4rexij7.us-east-1.rds.amazonaws.com", user="rr3343500", passwd="Rr3343500", database='StreamSpot')
 cur = conn.cursor()
 
 
